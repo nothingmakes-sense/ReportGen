@@ -11,9 +11,11 @@ def genAndSave(clientName, clientID, currentDate, response, serviceProvided, ser
     hourFormat = "%I:%M %p"
     dateFormat = "%m/%d/%Y"
     difference = (EndDate - StartDate).days
+    print(serviceProvided)
 
     i = 0
     while i <= difference:
+        
         response = AIResponse(clientName.get(), SupportPlan.get())
         pDocx(clientName.get(), clientID.get(), currentDate, response, serviceProvided.get(), serviceProvidedBy.get(), StartTime.strftime(hourFormat), EndTime.strftime(hourFormat), (EndTime - StartTime).total_seconds() / 3600)
         update_progress(i)
