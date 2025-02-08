@@ -159,5 +159,3 @@ clientDOB_entry_edit = ttk.Entry(edit_frame, width=textboxWidth, textvariable=cl
 clientDOB_entry_edit.grid(column=1, row=2, sticky=(W, E))
 
 # Entry point to the application
-if __name__ == "__main__":
-    root.mainloop()
