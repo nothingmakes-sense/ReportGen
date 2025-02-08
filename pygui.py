@@ -102,7 +102,14 @@ ttk.Label(panel1, text="End Date (month/day/year)").grid(column=descriptionCol, 
 button_state = NORMAL
 
 progress_var = tk.IntVar()
-generate_button = ttk.Button(panel1, text="Generate AI Reports", command=lambda: command(startDate, endDate, startTime, endTime, progress_bar, panel1, clientName, clientID, currentDate, response, serviceProvided, serviceProvidedBy, SupportPlan, generate_button), state=button_state)
+progress_bar = ttk.Progressbar(panel1, orient="horizontal", length=200, mode="determinate", variable=progress_var)
+progress_bar.grid(column=descriptionCol, row=12, columnspan=2, pady=10)
+
+currentDate = datetime.datetime.now().strftime("%Y-%m-%d")
+
+response = StringVar()
+
+generate_button = ttk.Button(panel1, text="Generate AI Reports", command=lambda: command(startDate, endDate, startTime, endTime, progress_bar, panel1, clientName, clientID, currentDate, response, patients_data, serviceProvidedBy, SupportPlan, generate_button))
 generate_button.grid(column=descriptionCol, row=13, columnspan=2, pady=10)
 
 # Load company name button
@@ -116,6 +123,10 @@ save_client_button.grid(column=descriptionCol, row=16, columnspan=2, pady=10)
 # Save provider data button
 save_provider_button = ttk.Button(panel1, text="Save Provider", command=lambda: save_provider_data(serviceProvidedBy, serviceProvidedBy_combo))
 save_provider_button.grid(column=descriptionCol, row=17, columnspan=2, pady=10)
+
+# Button to load patients and providers data
+load_data_button = ttk.Button(panel1, text="Load Data", command=lambda: load_data())
+load_data_button.grid(column=descriptionCol, row=18, columnspan=2, pady=10)
 
 # Second Panel for managing clients
 panel2 = ttk.Frame(notebook, padding="20 20 20 20")
@@ -158,4 +169,19 @@ ttk.Label(edit_frame, text="Client DOB").grid(column=0, row=2, sticky=W)
 clientDOB_entry_edit = ttk.Entry(edit_frame, width=textboxWidth, textvariable=clientDOB)
 clientDOB_entry_edit.grid(column=1, row=2, sticky=(W, E))
 
+def load_data():
+    global patients_data, providers_data
+    with open('patients.json', 'r') as f:
+        patients_data = json.load(f)
+    with open('providers.json', 'r') as f:
+        providers_data = json.load(f)
+    
+    # Update the client and provider dropdown menus
+    clientName_combo['values'] = [patient['name'] for patient in patients_data]
+    serviceProvidedBy_combo['values'] = [provider['name'] for provider in providers_data]
+
+    update_client_list()
+    print("Data loaded successfully")
+
 # Entry point to the application
+root.mainloop()

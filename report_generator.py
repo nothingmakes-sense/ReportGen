@@ -44,7 +44,7 @@ def command(startDate, endDate, startTime, endTime, progress_bar, panel, clientN
         EndTime = datetime.datetime.strptime(endTime.get(), hourFormat)
         difference = (EndDate - StartDate).days
         progress_bar = ttk.Progressbar(panel, maximum=difference)
-        progress_bar.grid(column=3, row=14, columnspan=2, pady=10)
+        progress_bar.grid(column=3, row=12, columnspan=2, pady=10)
         runGeneration(clientName, clientID, currentDate, response, serviceProvided, serviceProvidedBy, SupportPlan, StartDate, EndDate, StartTime, EndTime, update_progress, panel, generate_button)
     except Exception as e:
         popup_err(e)

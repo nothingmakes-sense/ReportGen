@@ -2,7 +2,18 @@ import json
 from gui_helpers import popup_err, popup_gen
 
 providers_data = []
-patients_data = []  # Initialize patients_data as an empty list
+patients_data = []
+
+# Load patients data from patients.json on startup
+try:
+    with open('patients.json', 'r') as file:
+        patients_data = json.load(file)
+except FileNotFoundError:
+    popup_err("patients.json file not found. Starting with empty patient data.")
+except json.JSONDecodeError:
+    popup_err("Error decoding patients.json. Starting with empty patient data.")
+except Exception as e:
+    popup_err(f"Failed to load patient data: {e}")
 
 def on_client_name_selected(event, clientName, clientID, clientDOB, serviceProvided, SupportPlan, serviceProvidedBy, patients_data):
     selected_name = clientName.get()
