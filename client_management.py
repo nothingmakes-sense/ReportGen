@@ -2,6 +2,7 @@ import json
 from gui_helpers import popup_err, popup_gen
 
 providers_data = []
+patients_data = []  # Initialize patients_data as an empty list
 
 def on_client_name_selected(event, clientName, clientID, clientDOB, serviceProvided, SupportPlan, serviceProvidedBy, patients_data):
     selected_name = clientName.get()
