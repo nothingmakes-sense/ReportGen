@@ -3,8 +3,11 @@ import threading
 from AIResponses import AIResponse
 from SaveDocx import pDocx
 from gui_helpers import popup_gen, popup_err
+import tkinter as tk
+from tkinter import *
+from tkinter import ttk
 
-def genAndSave(clientName, clientID, currentDate, response, serviceProvided, serviceProvidedBy, StartTime, EndTime, update_progress):
+def genAndSave(clientName, clientID, currentDate, response, serviceProvided, serviceProvidedBy, SupportPlan, StartDate, EndDate, StartTime, EndTime, update_progress):
     hourFormat = "%I:%M %p"
     dateFormat = "%m/%d/%Y"
     difference = (EndDate - StartDate).days
@@ -12,26 +15,26 @@ def genAndSave(clientName, clientID, currentDate, response, serviceProvided, ser
     i = 0
     while i <= difference:
         response = AIResponse(clientName.get(), SupportPlan.get())
-        pDocx(clientName.get(), clientID.get(), currentDate, response, serviceProvided.get(), serviceProvidedBy.get(), StartTime.strftime(hourFormat), EndTime.strftime(hourFormat), (EndTime - StartTime), (((EndTime - StartTime).seconds / 60) / 60) * 4)
+        pDocx(clientName.get(), clientID.get(), currentDate, response, serviceProvided.get(), serviceProvidedBy.get(), StartTime.strftime(hourFormat), EndTime.strftime(hourFormat), (EndTime - StartTime).total_seconds() / 3600)
         update_progress(i)
         currentDate += datetime.timedelta(days=1)
         i += 1
     popup_gen('Complete!')
 
-def update_progress(value, progress_bar, panel):
+def update_progress(value, progress_bar, panel, generate_button):
     progress_bar['value'] = value
     panel.update_idletasks()
     if value == progress_bar['maximum']:
         generate_button['state'] = NORMAL
 
-def runGeneration(clientName, clientID, currentDate, response, serviceProvided, serviceProvidedBy, StartTime, EndTime, update_progress, panel):
+def runGeneration(clientName, clientID, currentDate, response, serviceProvided, serviceProvidedBy, SupportPlan, StartDate, EndDate, StartTime, EndTime, update_progress, panel, generate_button):
     generate_button['state'] = DISABLED
     def wrapper():
-        genAndSave(clientName, clientID, currentDate, response, serviceProvided, serviceProvidedBy, StartTime, EndTime, update_progress)
+        genAndSave(clientName, clientID, currentDate, response, serviceProvided, serviceProvidedBy, SupportPlan, StartDate, EndDate, StartTime, EndTime, update_progress)
     thread = threading.Thread(target=wrapper)
     thread.start()
 
-def command(startDate, endDate, startTime, endTime, progress_bar, panel):
+def command(startDate, endDate, startTime, endTime, progress_bar, panel, clientName, clientID, currentDate, response, serviceProvided, serviceProvidedBy, SupportPlan, generate_button):
     try:
         hourFormat = "%I:%M %p"
         dateFormat = "%m/%d/%Y"
@@ -42,6 +45,6 @@ def command(startDate, endDate, startTime, endTime, progress_bar, panel):
         difference = (EndDate - StartDate).days
         progress_bar = ttk.Progressbar(panel, maximum=difference)
         progress_bar.grid(column=3, row=14, columnspan=2, pady=10)
-        runGeneration(clientName, clientID, currentDate, response, serviceProvided, serviceProvidedBy, StartTime, EndTime, update_progress, panel)
+        runGeneration(clientName, clientID, currentDate, response, serviceProvided, serviceProvidedBy, SupportPlan, StartDate, EndDate, StartTime, EndTime, update_progress, panel, generate_button)
     except Exception as e:
         popup_err(e)

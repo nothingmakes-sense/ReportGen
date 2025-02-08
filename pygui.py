@@ -102,7 +102,7 @@ ttk.Label(panel1, text="End Date (month/day/year)").grid(column=descriptionCol, 
 button_state = NORMAL
 
 progress_var = tk.IntVar()
-generate_button = ttk.Button(panel1, text="Generate AI Reports", command=lambda: command(startDate, endDate, startTime, endTime, progress_bar, panel1), state=button_state)
+generate_button = ttk.Button(panel1, text="Generate AI Reports", command=lambda: command(startDate, endDate, startTime, endTime, progress_bar, panel1, clientName, clientID, currentDate, response, serviceProvided, serviceProvidedBy, SupportPlan, generate_button), state=button_state)
 generate_button.grid(column=descriptionCol, row=13, columnspan=2, pady=10)
 
 # Load company name button
@@ -158,4 +158,6 @@ ttk.Label(edit_frame, text="Client DOB").grid(column=0, row=2, sticky=W)
 clientDOB_entry_edit = ttk.Entry(edit_frame, width=textboxWidth, textvariable=clientDOB)
 clientDOB_entry_edit.grid(column=1, row=2, sticky=(W, E))
 
-ttk.Label
+# Entry point to the application
+if __name__ == "__main__":
+    root.mainloop()
